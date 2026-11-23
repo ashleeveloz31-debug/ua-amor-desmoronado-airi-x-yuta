@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teléfono de Yuta - TODO COMPLETO EP 1-6</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+body{background:#000;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.iphone{width:390px;height:844px;max-width:100%;border-radius:50px;overflow:hidden;position:relative;background-image:url('airi-yuta.jpg');background-size:cover;background-position:center top;box-shadow:0 0 0 8px #111,0 20px 60px rgba(0,0,0,.6)}
+.overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.30),transparent 40%,transparent 55%,rgba(0,0,0,.65))}
+.top{position:absolute;top:18px;left:0;right:0;display:flex;justify-content:space-between;padding:0 30px;color:white;font-size:14px;font-weight:600;z-index:20}
+.bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;background:white;border-radius:10px;z-index:30}
+.pantalla{position:absolute;inset:0;z-index:3;display:none;overflow-y:auto}
+.cerrar{margin:12px auto;background:#111;color:white;border:none;padding:10px 22px;border-radius:20px;font-weight:700;display:block;cursor:pointer}
+#lock{display:block;overflow:hidden}
+#lock .center{position:absolute;top:95px;left:0;right:0;text-align:center;color:white;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+#lock .center h1{font-size:78px;font-weight:200}
+#lock .ceniza{position:absolute;top:240px;left:0;right:0;text-align:center;color:white;text-shadow:0 2px 15px rgba(0,0,0,.8)}
+#lock .ceniza h2{font-size:32px;font-weight:900}
+#lock .pass-box{position:absolute;bottom:115px;left:0;right:0;text-align:center;color:white}
+#lock .pass-box input{padding:13px;border-radius:20px;border:none;text-align:center;font-size:18px;letter-spacing:3px;width:175px;outline:none}
+#lock .pass-box button{background:white;color:black;border:none;padding:11px 26px;border-radius:20px;font-weight:800;cursor:pointer;margin-top:12px}
+#home{padding:70px 12px 20px;overflow:hidden}
+#home .saludo{color:white;text-shadow:0 2px 10px rgba(0,0,0,.6);margin-bottom:12px;padding:0 6px}
+.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:13px 8px}
+.app{text-align:center;color:white;font-size:10px;text-shadow:0 1px 5px rgba(0,0,0,.8);cursor:pointer;position:relative}
+.app .icono{width:58px;height:58px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 4px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.badge{position:absolute;top:-4px;right:6px;background:#ff3b30;color:white;width:20px;height:20px;border-radius:50%;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:800}
+.dock{position:absolute;bottom:35px;left:15px;right:15px;background:rgba(255,255,255,.25);backdrop-filter:blur(15px);border-radius:28px;padding:12px;display:flex;justify-content:space-around}
+.dock .icono{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.app-page{background:white}
+.app-header{padding:65px 16px 12px;background:white;position:sticky;top:0;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;z-index:2}
+.app-header button{background:#eee;border:none;padding:6px 12px;border-radius:20px;cursor:pointer}
+.chat{padding:12px;display:flex;flex-direction:column;gap:10px;min-height:520px}
+.msg{max-width:82%;padding:10px 13px;border-radius:18px;font-size:13px;line-height:1.4}
+.msg.yo{background:#dcf8c6;align-self:flex-end;border-bottom-right-radius:4px}
+.msg.el{background:white;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.msg small{display:block;font-size:10px;color:#888;margin-top:4px;text-align:right}
+.input-chat{position:sticky;bottom:0;background:white;padding:10px;display:flex;gap:8px;border-top:1px solid #eee}
+.input-chat input{flex:1;border:1px solid #ddd;border-radius:20px;padding:10px 14px;outline:none}
+.input-chat button{background:#ff5a8a;color:white;border:none;padding:10px 16px;border-radius:20px;font-weight:700}
+.galeria{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px}
+.galeria div{height:170px;background-image:url('airi-yuta.jpg');background-size:cover;background-position:center;border-radius:12px}
+.lista{padding:10px 16px}
+.item-lista{display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid #eee;cursor:pointer}
+.item-lista .icono2{width:44px;height:44px;border-radius:50%;background:#ffe0e8;display:flex;align-items:center;justify-content:center;font-size:20px}
+.nota{background:#fff9c4;margin:12px;padding:14px;border-radius:14px;font-size:13px;line-height:1.5}
+.spotify{background:#121212;color:white}
+.spotify .app-header{background:#121212;border:none}
+.spotify .app-header button{background:#282828;color:white}
+.song{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid #222;cursor:pointer}
+.song .num{width:22px;color:#aaa;font-size:13px;text-align:center}
+.song .cover{width:48px;height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.song b{font-size:14px;display:block}
+.song span{font-size:12px;color:#aaa}
+.song.active{background:#1f1f1f;border-left:3px solid #1DB954}
+.player{position:sticky;bottom:0;background:#282828;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.player button{background:#1DB954;border:none;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer}
+.ep-bar{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;background:#f5f5f5}
+.ep-bar button{border:none;padding:8px 12px;border-radius:20px;font-weight:700;cursor:pointer;white-space:nowrap;background:#eee}
+.ep-bar button.on{background:#ff5a8a;color:white}
+.audio{background:#f0f0f0;border-radius:16px;padding:10px 12px;display:flex;gap:8px;align-items:center;font-size:12px}
+@media(max-width:430px){body{padding:0}.iphone{border-radius:0;box-shadow:none;height:100vh;width:100%}}
+</style>
+</head>
+<body>
+<div class="iphone">
+<div class="overlay"></div>
+<div class="top"><span>21:16</span><span>📶 📡 🔋</span></div>
+
+<!-- BLOQUEO -->
+<div id="lock" class="pantalla" style="display:block">
+<div class="center"><p>Domingo, 22 de noviembre</p><h1>21:16</h1></div>
+<div class="ceniza"><h2>Teléfono de Yuta 💗</h2><p style="margin-top:6px;">un amor desmoronado🔥 Airi x Yuta</p><p style="font-size:24px;">💗</p></div>
+<div class="pass-box"><p style="font-size:13px;margin-bottom:10px;">Contraseña: Cumple de Airi 🎂<br><small style="opacity:.8;">Solo Yuta la sabe 🫣</small></p><input id="pass" type="password" placeholder="••••••••" inputmode="numeric"><br><button onclick="checkPass(event)">Desbloquear 🔓</button><p id="error" style="color:#ff8a8a;font-size:13px;margin-top:8px;display:none;">Esa no es, solo Yuta sabe 😢</p><p style="font-size:11px;opacity:.7;margin-top:10px;">Pista: 30 - 08 - 1897</p></div>
+<div style="position:absolute;bottom:28px;left:0;right:0;display:flex;justify-content:space-between;padding:0 40px;font-size:28px;"><span>🔦</span><span>📷</span></div>
+</div>
+
+<!-- INICIO - TODAS LAS APPS -->
+<div id="home" class="pantalla">
+<div class="saludo"><p>Hola, Yuta 💗</p><h2 style="font-size:28px;">un amor desmoronado🔥</h2><p style="font-size:13px;">Airi x Yuta • EP 1 al 6 • TODO</p></div>
+<div class="apps">
+<div class="app" onclick="abrir(event,'ig')"><div class="icono" style="background:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7)">📸</div>Instagram<div class="badge">3</div></div>
+<div class="app" onclick="abrir(event,'wa-airi')"><div class="icono" style="background:#25D366">💬</div>Airi 💗<div class="badge">2</div></div>
+<div class="app" onclick="abrir(event,'wa-nadia')"><div class="icono" style="background:#111">🖤</div>Nadia<div class="badge">5</div></div>
+<div class="app" onclick="abrir(event,'spotify')"><div class="icono" style="background:#1DB954">🎵</div>Spotify</div>
+<div class="app" onclick="abrir(event,'tiktok')"><div class="icono" style="background:#000">🎶</div>TikTok<div class="badge">9</div></div>
+<div class="app" onclick="abrir(event,'snap')"><div class="icono" style="background:#fffc00">👻</div>Snapchat<div class="badge">4</div></div>
+<div class="app" onclick="abrir(event,'gmail')"><div class="icono" style="background:#ea4335">📧</div>Gmail<div class="badge">1</div></div>
+<div class="app" onclick="abrir(event,'youtube')"><div class="icono" style="background:#ff0000">▶️</div>YouTube</div>
+<div class="app" onclick="abrir(event,'galeria')"><div class="icono" style="background:#007aff">🖼️</div>Galería</div>
+<div class="app" onclick="abrir(event,'ocultas')"><div class="icono" style="background:#111">🔒</div>Ocultas</div>
+<div class="app" onclick="abrir(event,'sms')"><div class="icono" style="background:#34c759">💬</div>Mensajes</div>
+<div class="app" onclick="abrir(event,'mapas')"><div class="icono" style="background:#34a853">🗺️</div>Mapas</div>
+<div class="app" onclick="abrir(event,'notis')"><div class="icono" style="background:#ffcc00">🔔</div>Notis</div>
+<div class="app" onclick="abrir(event,'llamadas')"><div class="icono" style="background:#34c759">📞</div>Llamadas</div>
+<div class="app" onclick="abrir(event,'notas')"><div class="icono" style="background:#ff9500">📝</div>Notas</div>
+<div class="app" onclick="abrir(event,'fotos')"><div class="icono" style="background:#af52de">💜</div>Recuerdos</div>
+<div class="app" onclick="abrir(event,'calendario')"><div class="icono" style="background:#fff;color:#111;font-weight:900;">30<br><span style="font-size:9px;">AGO</span></div>Calendario</div>
+<div class="app" onclick="abrir(event,'camara')"><div class="icono" style="background:#5856d6">📷</div>Cámara</div>
+<div class="app" onclick="abrir(event,'episodios')"><div class="icono" style="background:#ff5a8a">🎬</div>Episodios</div>
+<div class="app" onclick="abrir(event,'ajustes')"><div class="icono" style="background:#8e8e93">⚙️</div>Ajustes</div>
+<div class="app" onclick="abrir(event,'contactos')"><div class="icono" style="background:#007aff">👥</div>Contactos</div>
+<div class="app" onclick="abrir(event,'safari')"><div class="icono" style="background:#fff;color:#007aff;">🧭</div>Safari</div>
+<div class="app" onclick="abrir(event,'reloj')"><div class="icono" style="background:#111">⏰</div>Reloj</div>
+<div class="app" onclick="abrir(event,'calculadora')"><div class="icono" style="background:#333">🧮</div>Calculadora</div>
+</div>
+<div class="dock"><div class="icono" style="background:#34c759">📞</div><div class="icono" style="background:#007aff">💬</div><div class="icono" style="background:#1DB954">🎵</div><div class="icono" style="background:#ff2d55">❤️</div></div>
+</div>
+
+<!-- EPISODIOS -->
+<div id="episodios" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>🎬 Episodios • CENIZA</b><button onclick="cerrar(event)">✕</button></div>
+<div class="ep-bar"><button class="on" onclick="showEp(event,1)">EP 1</button><button onclick="showEp(event,2)">EP 2</button><button onclick="showEp(event,3)">EP 3</button><button onclick="showEp(event,4)">EP 4</button><button onclick="showEp(event,5)">EP 5</button><button onclick="showEp(event,6)">EP 6 😱</button></div>
+<div id="ep1" class="ep-content" style="padding:16px;font-size:13px;line-height:1.6;"><h3>EP 1 - CENIZA 🔥</h3><p>Conocemos a Airi y Yuta. Novios, tiernos, abrazados. Todo bonito. Contraseña: cumple de Airi. Spotify: Cigarette Smoke - Olivia Rodrigo.</p><p style="margin-top:10px;">💬 Airi: "Te amo, mi CENIZA"</p></div>
+<div id="ep2" class="ep-content" style="padding:16px;font-size:13px;line-height:1.6;display:none;"><h3>EP 2 - SIEMPRE JUNTOS 💗</h3><p>Yuta le dice a Airi que es su Number One Girl. Instagram foto juntos. Todo normal. Canción: Number One Girl - ROSÉ.</p></div>
+<div id="ep3" class="ep-content" style="padding:16px;font-size:13px;line-height:1.6;display:none;"><h3>EP 3 - ALGO RARO 👀</h3><p>Yuta tarda en contestar. Llamada sin nombre 21:12. Nadie notó nada. Canción: No One Noticed - The Marías.</p></div>
+<div id="ep4" class="ep-content" style="padding:16px;font-size:13px;line-height:1.6;display:none;"><h3>EP 4 - EN DONDE SIEMPRE 🫣</h3><p>Yuta sale sin decir a donde. En Notas: "En donde siempre". Canción: Aline - Adanowsky, Mon Laferte.</p></div>
+<div id="ep5" class="ep-content" style="padding:16px;font-size:13px;line-height:1.6;display:none;"><h3>EP 5 - DIFERENTE ✨</h3><p>Yuta está diferente. Airi pregunta, él dice "todo bien". Notificación borrada. Canción: Diferente - Yeyo.</p></div>
+<div id="ep6" class="ep-content" style="padding:16px;font-size:13px;line-height:1.6;display:none;background:#111;color:white;"><h3>EP 6 - EL TELÉFONO DE YUTA 😱</h3><p>Agarramos el teléfono. Desbloqueamos con cumple de Airi. Primero todo normal... luego aparece NADIA 🖤<br><br><b>Nadia:</b> Yuta, te extraño<br><b>Yuta:</b> Nadia, Nadia, mi amor, ¿nos veremos en donde siempre?<br><b>Nadia:</b> Borra esto, que Airi no lo vea<br><br>Canción final: Si Te Sientes Sola - GSAD</p><button onclick="abrir(event,'wa-nadia')" style="background:#ff5a8a;color:white;border:none;padding:10px 18px;border-radius:20px;font-weight:800;margin-top:10px;">Ver chat de Nadia 🖤</button></div>
+</div>
+
+<!-- INSTAGRAM -->
+<div id="ig" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>Instagram</b><button onclick="cerrar(event)">✕ Cerrar</button></div>
+<div style="padding:12px 14px;display:flex;gap:10px;align-items:center;"><div style="width:38px;height:38px;border-radius:50%;background:#ffb3c6;display:flex;align-items:center;justify-content:center;">💗</div><div><b>airi.ceniza</b><br><small style="color:#888;">Comalcalco, Tabasco</small></div></div>
+<div style="height:280px;background-image:url('airi-yuta.jpg');background-size:cover;background-position:center;"></div>
+<div style="padding:10px 14px;font-size:22px;">❤️ 💬 ✈️ &nbsp;&nbsp; 🔖</div>
+<div style="padding:0 14px 14px;font-size:13px;"><b>airi.ceniza</b> CENIZA 🔥 con mi Yuta, siempre abrazados 💗<br><b>yuta.ceniza</b> Te amo mi vida 🥹💗</div>
+</div>
+
+<!-- WHATSAPP AIRI -->
+<div id="wa-airi" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header" style="background:#075E54;"><b style="color:white;">💗 Airi • en línea</b><button onclick="cerrar(event)">✕</button></div>
+<div class="chat" style="background:#ECE5DD;">
+<div class="msg el">EP 1 - Yuta, ¿ya comiste? 💗<small>20:55</small></div>
+<div class="msg yo">Siiip, mi amor, ¿y tú? 💗<small>20:56</small></div>
+<div class="msg el">EP 2 - Te amo, mi pequeño<small>20:57</small></div>
+<div class="msg yo">Te amo más, Airi 💗 Eres mi Number One Girl<small>20:58</small></div>
+<div class="msg el">EP 3 - Yuta, ¿por qué tardas tanto en contestar? 🥺<small>21:05</small></div>
+<div class="msg yo">Perdón, mi amor, estaba ocupado 💗<small>21:06</small></div>
+<div class="msg el">EP 5 - ¿Estás diferente conmigo? 🥺<small>21:00</small></div>
+<div class="msg yo">No, mi amor, todo bien 💗<small>21:01</small></div>
+<div class="msg el">EP 6 - Te amo, mañana nos vemos? 💗<small>21:16</small></div>
+</div>
+<div class="input-chat"><input placeholder="Mensaje"><button style="background:#25D366;">Enviar</button></div>
+</div>
+
+<!-- WHATSAPP NADIA -->
+<div id="wa-nadia" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header" style="background:#111;"><b style="color:white;">🖤 Nadia • en línea</b><button onclick="cerrar(event)">✕</button></div>
+<div class="chat" style="background:#1a1a1a;">
+<div class="msg el" style="background:#2a2a2a;color:white;">Yuta, te extraño 🥹<small>EP 6 • 21:10</small></div>
+<div class="msg yo" style="background:#3a3a3a;color:white;">Nadia<small>21:11</small></div>
+<div class="msg yo" style="background:#3a3a3a;color:white;">Nadia<small>21:11</small></div>
+<div class="msg yo" style="background:#3a3a3a;color:white;">Mi amor 💗<small>21:11</small></div>
+<div class="msg yo" style="background:#3a3a3a;color:white;">¿Nos veremos en donde siempre? 🫣<small>21:12</small></div>
+<div class="msg el" style="background:#2a2a2a;color:white;">Siiip, en donde siempre, que nadie nos vea<small>21:13</small></div>
+<div class="msg el" style="background:#2a2a2a;color:white;">Borra esto, que Airi no lo vea 😶<small>21:14</small></div>
+<div class="msg yo" style="background:#3a3a3a;color:white;">Ya lo borro, tranquila, mi amor 🖤<small>21:15</small></div>
+<div class="msg el" style="background:#2a2a2a;color:white;"><div class="audio">🎤 Nota de voz • 0:12 ▶️</div><small>21:16</small></div>
+<div class="msg el" style="background:#2a2a2a;color:white;">Te extraño, Yuta, no me dejes 🥹🖤<small>21:17</small></div>
+</div>
+<div class="input-chat" style="background:#111;border:none;"><input style="background:#2a2a2a;color:white;border:none;" placeholder="Mensaje..."><button style="background:#111;border:1px solid #444;color:white;">Enviar</button></div>
+</div>
+
+<!-- SPOTIFY -->
+<div id="spotify" class="pantalla app-page spotify" onclick="event.stopPropagation()">
+<div class="app-header"><b>Spotify</b><button onclick="cerrar(event)">✕</button></div>
+<div style="text-align:center;padding:10px;"><div style="width:170px;height:170px;margin:0 auto;border-radius:12px;background-image:url('airi-yuta.jpg');background-size:cover;display:flex;align-items:flex-end;padding:10px;font-weight:900;text-shadow:0 2px 10px rgba(0,0,0,.8);">CENIZA 🔥</div><h2 style="margin-top:10px;">CENIZA 🔥</h2><p style="font-size:13px;color:#aaa;">Playlist de Yuta • EP 1 al 6 • 6 canciones</p></div>
+<div class="song active" onclick="playSong(this,'Cigarette Smoke','Olivia Rodrigo')"><span class="num">1</span><div class="cover" style="background:#ffb3c6;">🚬</div><div style="flex:1;"><b>Cigarette Smoke</b><span>Olivia Rodrigo • EP 1</span></div><span style="color:#aaa;">3:12</span></div>
+<div class="song" onclick="playSong(this,'Number One Girl','ROSÉ')"><span class="num">2</span><div class="cover" style="background:#ff8a8a;">🌹</div><div style="flex:1;"><b>Number One Girl</b><span>ROSÉ • EP 2</span></div><span style="color:#aaa;">3:36</span></div>
+<div class="song" onclick="playSong(this,'No One Noticed','The Marías')"><span class="num">3</span><div class="cover" style="background:#a78bfa;">🌙</div><div style="flex:1;"><b>No One Noticed</b><span>The Marías • EP 3</span></div><span style="color:#aaa;">3:56</span></div>
+<div class="song" onclick="playSong(this,'Aline','Adanowsky, Mon Laferte')"><span class="num">4</span><div class="cover" style="background:#f472b6;">💋</div><div style="flex:1;"><b>Aline</b><span>Adanowsky, Mon Laferte • EP 4</span></div><span style="color:#aaa;">3:20</span></div>
+<div class="song" onclick="playSong(this,'Diferente','Yeyo')"><span class="num">5</span><div class="cover" style="background:#facc15;">✨</div><div style="flex:1;"><b>Diferente</b><span>Yeyo • EP 5</span></div><span style="color:#aaa;">2:58</span></div>
+<div class="song" onclick="playSong(this,'Si Te Sientes Sola','GSAD')"><span class="num">6</span><div class="cover" style="background:#60a5fa;">💙</div><div style="flex:1;"><b>Si Te Sientes Sola</b><span>GSAD • EP 6</span></div><span style="color:#aaa;">3:05</span></div>
+<div style="padding:16px;font-size:12px;color:#888;">Playlist secreta de Yuta... ¿Para Airi o para Nadia? 🖤💗</div>
+<div class="player"><div style="width:38px;height:38px;border-radius:8px;background:#ffb3c6;display:flex;align-items:center;justify-content:center;">🚬</div><div style="flex:1;"><b id="now-title" style="font-size:13px;">Cigarette Smoke</b><br><span id="now-artist" style="font-size:11px;color:#aaa;">Olivia Rodrigo</span></div><button onclick="togglePlay(event)">⏸️</button></div>
+</div>
+
+<!-- TIKTOK -->
+<div id="tiktok" class="pantalla" onclick="event.stopPropagation()" style="background:#000;color:white;">
+<div class="app-header" style="background:#000;border:none;"><b style="color:white;">TikTok</b><button onclick="cerrar(event)" style="background:#333;color:white;">✕</button></div>
+<div style="height:380px;background-image:url('airi-yuta.jpg');background-size:cover;background-position:center;position:relative;"><div style="position:absolute;bottom:12px;left:12px;"><b>@airi.shin</b><p style="font-size:13px;">cena con mi Yuta 💗🔥 #airi #yuta</p></div><div style="position:absolute;right:12px;bottom:12px;text-align:center;font-size:22px;">❤️<br><span style="font-size:12px;">12.3K</span><br>💬<br><span style="font-size:12px;">890</span><br>✈️</div></div>
+<div style="padding:14px;background:#111;"><b>@nadia.secret</b><p style="font-size:13px;color:#aaa;">Cuando te extraña pero no puede decirlo 🖤 #secreto</p></div>
+</div>
+
+<!-- SNAPCHAT -->
+<div id="snap" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header" style="background:#fffc00;"><b>👻 Snapchat</b><button onclick="cerrar(event)">✕</button></div>
+<div class="lista">
+<div class="item-lista" onclick="abrir(event,'wa-nadia')"><div class="icono2" style="background:#111;color:white;">🖤</div><div><b>Nadia 🖤</b><br><small>Te envió un Snap • Hace 5 min • EP 6</small></div><span style="margin-left:auto;">📸</span></div>
+<div class="item-lista"><div class="icono2">💗</div><div><b>Airi 💗</b><br><small>Te envió un Snap • Hace 1 h</small></div><span style="margin-left:auto;">💗</span></div>
+</div>
+<p style="padding:0 16px;font-size:12px;color:#888;">Los Snaps de Nadia se borran en 24h 🫣</p>
+</div>
+
+<!-- GMAIL -->
+<div id="gmail" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>📧 Gmail</b><button onclick="cerrar(event)">✕</button></div>
+<div class="lista">
+<div class="item-lista"><div class="icono2" style="background:#111;color:white;">🖤</div><div><b>Nadia</b><br><small>Asunto: En donde siempre... 🖤 • EP 6</small></div></div>
+<div class="item-lista"><div class="icono2">💗</div><div><b>Airi 💗</b><br><small>Asunto: Te amo, mi amor 💘</small></div></div>
+<div class="item-lista"><div class="icono2">🎵</div><div><b>Spotify</b><br><small>Tu playlist 😪💗 tiene 6 canciones</small></div></div>
+</div>
+</div>
+
+<!-- YOUTUBE -->
+<div id="youtube" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>▶️ YouTube</b><button onclick="cerrar(event)">✕</button></div>
+<div style="padding:10px;"><div style="height:180px;background-image:url('airi-yuta.jpg');background-size:cover;border-radius:12px;"></div><p style="font-size:13px;font-weight:700;margin-top:8px;">amor desmoronado😪 Airi x Yuta - EP 1</p><p style="font-size:12px;color:#888;">Airi CENIZA • 128K vistas</p></div>
+<div style="padding:10px;"><div style="height:180px;background:#111;border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-size:30px;">🖤 EP 6</div><p style="font-size:13px;font-weight:700;margin-top:8px;">Descubrimos el teléfono de Yuta 😱</p><p style="font-size:12px;color:#888;">Airi CENIZA • EP 6</p></div>
+</div>
+
+<!-- GALERIA -->
+<div id="galeria" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>🖼️ Galería • CENIZA</b><button onclick="cerrar(event)">✕</button></div>
+<div class="galeria"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</div>
+
+<!-- OCULTAS -->
+<div id="ocultas" class="pantalla app-page" onclick="event.stopPropagation()" style="background:#111;color:white;">
+<div class="app-header" style="background:#111;border:none;"><b style="color:white;">🔒 Ocultas • Nadia</b><button onclick="cerrar(event)" style="background:#333;color:white;">✕</button></div>
+<div style="padding:16px;font-size:13px;">Álbum secreto de Yuta 🖤<br><small style="color:#aaa;">Solo Yuta sabe de esto... hasta el EP 6</small></div>
+<div class="galeria"><div style="background:#222;display:flex;align-items:center;justify-content:center;color:white;font-size:30px;">🖤</div><div style="background:#222;display:flex;align-items:center;justify-content:center;color:white;font-size:30px;">🖤</div><div style="background:#222;display:flex;align-items:center;justify-content:center;color:white;font-size:30px;">🖤</div><div style="background:#222;display:flex;align-items:center;justify-content:center;color:white;font-size:30px;">🖤</div></div>
+</div>
+
+<!-- SMS -->
+<div id="sms" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>💬 Mensajes</b><button onclick="cerrar(event)">✕</button></div>
+<div class="lista">
+<div class="item-lista" onclick="abrir(event,'wa-airi')"><div class="icono2">💗</div><div><b>Airi 💗</b><br><small>Te amo, mi niño 🥺💘</small></div></div>
+<div class="item-lista" onclick="abrir(event,'wa-nadia')"><div class="icono2" style="background:#111;color:white;">🖤</div><div><b>Nadia 🖤</b><br><small>Yuta, te extraño... borra esto</small></div></div>
+</div>
+<div style="margin:12px;background:#eee;padding:12px;border-radius:12px;font-size:12px;color:#888;">Mensajes borrados: 12 mensajes eliminados por Yuta • EP 6</div>
+</div>
+
+<!-- MAPAS -->
+<div id="mapas" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>🗺️ Mapas</b><button onclick="cerrar(event)">✕</button></div>
+<div style="height:300px;background:#d4e8d4;display:flex;align-items:center;justify-content:center;flex-direction:column;"><div style="font-size:40px;">📍</div><b>En donde siempre</b><p style="font-size:12px;color:#555;">Comalcalco, Tabasco • Lugar de Yuta y Nadia 🖤</p></div>
+<div style="padding:14px;font-size:13px;"><b>Historial:</b><br>• Casa de Airi 💗<br>• En donde siempre 🖤<br>• Casa de Yuta</div>
+</div>
+
+<!-- LLAMADAS -->
+<div id="llamadas" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>📞 Llamadas</b><button onclick="cerrar(event)">✕</button></div>
+<div class="lista">
+<div class="item-lista"><div class="icono2">💗</div><div><b>Airi 💗</b><br><small>EP 1 • Hoy 21:16 • Llamada saliente</small></div><span style="margin-left:auto;">📞</span></div>
+<div class="item-lista" onclick="abrir(event,'wa-nadia')"><div class="icono2" style="background:#333;color:white;">🖤</div><div><b>Nadia 🖤</b><br><small>EP 6 • Hoy 21:12 • 12 min • Secreta</small></div><span style="margin-left:auto;">📞</span></div>
+<div class="item-lista"><div class="icono2">💗</div><div><b>Airi 💗</b><br><small>EP 2 • Ayer 22:40 • Videollamada 1h 20m</small></div><span style="margin-left:auto;">📹</span></div>
+<div class="item-lista"><div class="icono2">❓</div><div><b>Número desconocido</b><br><small>EP 3 • Llamada perdida 21:12</small></div><span style="margin-left:auto;">📞</span></div>
+</div>
+</div>
+
+<!-- NOTAS -->
+<div id="notas" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>📝 Notas de Yuta</b><button onclick="cerrar(event)">✕</button></div>
+<div class="nota"><b>EP 1 - Cosas que amo de Airi 💗</b><br>1. Su sonrisa<br>2. Sus moñitos rosas<br>3. Cuando me abraza<br>4. TODO de ella 🔥</div>
+<div class="nota" style="background:#ffe0e8;"><b>EP 2 - Recordatorio 🔔</b><br>30 de agosto: Cumple de Airi 🎂<br>¡No olvidar! Es mi Number One Girl</div>
+<div class="nota" style="background:#e0f7ff;"><b>EP 4 - ???</b><br>En donde siempre. No decirle a nadie.</div>
+<div class="nota" style="background:#111;color:white;"><b>EP 6 - NO BORRAR - Nadia 🖤</b><br>En donde siempre. Que Airi no lo vea. Borrar mensajes.</div>
+</div>
+
+<!-- RECUERDOS -->
+<div id="fotos" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>💜 Recuerdos</b><button onclick="cerrar(event)">✕</button></div>
+<div class="galeria"><div></div><div></div><div></div><div></div></div>
+<p style="text-align:center;font-size:13px;color:#888;padding-bottom:20px;">Primer abrazo • CENIZA 🔥 • EP 1</p>
+</div>
+
+<!-- CALENDARIO -->
+<div id="calendario" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>📅 Calendario</b><button onclick="cerrar(event)">✕</button></div>
+<div class="lista">
+<div class="item-lista"><div class="icono2">🎂</div><div><b>30 Agosto - Cumple de Airi 💗</b><br><small>EP 1 • Todo el día</small></div></div>
+<div class="item-lista"><div class="icono2" style="background:#333;color:white;">🖤</div><div><b>Ver a Nadia</b><br><small>EP 6 • En donde siempre</small></div></div>
+<div class="item-lista"><div class="icono2">🔥</div><div><b>Aniversario vida y yo</b><br><small>22 Noviembre • Airi x Yuta</small></div></div>
+</div>
+</div>
+
+<!-- CAMARA -->
+<div id="camara" class="pantalla" onclick="event.stopPropagation()" style="background:#000;">
+<div style="height:100%;background-image:url('airi-yuta.jpg');background-size:cover;background-position:center;position:relative;">
+<div style="position:absolute;top:65px;left:0;right:0;text-align:center;color:white;font-weight:700;">🔥 • Cámara</div>
+<div style="position:absolute;bottom:90px;left:0;right:0;display:flex;justify-content:center;gap:30px;align-items:center;color:white;font-size:28px;"><span>🖼️</span><span style="width:70px;height:70px;border:4px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.2);">📷</span><span>🔄</span></div>
+<button onclick="cerrar(event)" style="position:absolute;top:65px;right:16px;background:white;border:none;padding:8px 14px;border-radius:20px;font-weight:700;">✕</button>
+</div>
+</div>
+
+<!-- NOTIFICACIONES -->
+<div id="notis" class="pantalla" onclick="event.stopPropagation()" style="padding:70px 16px;">
+<div style="background:white;border-radius:20px;padding:14px;margin-bottom:12px;"><b>Airi 💗</b><p style="font-size:13px;">Te amo, mi bello niño 💗</p></div>
+<div style="background:#111;color:white;border-radius:20px;padding:14px;margin-bottom:12px;"><b>Nadia 🖤</b><p style="font-size:13px;">Yuta, te extraño 🥹 • EP 6</p></div>
+<div style="background:white;border-radius:20px;padding:14px;margin-bottom:12px;"><b>Spotify</b><p style="font-size:13px;">Estás escuchando Cigarette Smoke - Olivia Rodrigo</p></div>
+<div style="background:white;border-radius:20px;padding:14px;margin-bottom:12px;"><b>TikTok</b><p style="font-size:13px;">@airi.shin te mencionó 💗</p></div>
+<button class="cerrar" onclick="cerrar(event)">Cerrar ✕</button>
+</div>
+
+<!-- MUSICA SIMPLE -->
+<div id="music" class="pantalla" onclick="event.stopPropagation()" style="background:#111;color:white;text-align:center;padding:70px 20px;">
+<div style="width:220px;height:220px;border-radius:20px;background-image:url('airi-yuta.jpg');background-size:cover;margin:10px auto 16px;"></div><h3>vida🔥</h3><p>Airi x Yuta • Nuestra canción</p>
+<div style="display:flex;justify-content:center;gap:25px;font-size:32px;margin-top:18px;"><span>⏮️</span><span style="font-size:52px;margin-top:-10px;">⏸️</span><span>⏭️</span></div>
+<button class="cerrar" onclick="cerrar(event)" style="background:white;color:black;margin-top:25px;">Volver ✕</button>
+</div>
+
+<!-- CONTACTOS -->
+<div id="contactos" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>👥 Contactos</b><button onclick="cerrar(event)">✕</button></div>
+<div class="lista">
+<div class="item-lista" onclick="abrir(event,'wa-airi')"><div class="icono2">💗</div><div><b>Airi 💗</b><br><small>Novia • mi vida? </small></div></div>
+<div class="item-lista" onclick="abrir(event,'wa-nadia')"><div class="icono2" style="background:#333;color:white;">🖤</div><div><b>Nadia 🖤</b><br><small>??? • En donde siempre</small></div></div>
+</div>
+</div>
+
+<!-- SAFARI -->
+<div id="safari" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>🧭 Safari</b><button onclick="cerrar(event)">✕</button></div>
+<div style="padding:16px;"><div style="background:#eee;padding:12px;border-radius:20px;text-align:center;color:#888;">🔍 Buscar: amor desmoronado Airi x Yuta</div><div style="margin-top:16px;background:#f5f5f5;padding:14px;border-radius:14px;font-size:13px;line-height:1.5;"><b>Historial de Yuta</b><br>• "regalo para Airi cumple 30 agosto"<br>• "en donde siempre Comalcalco"<br>• "como borrar mensajes WhatsApp"</div></div>
+</div>
+
+<!-- AJUSTES -->
+<div id="ajustes" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>⚙️ Ajustes</b><button onclick="cerrar(event)">✕</button></div>
+<div class="lista">
+<div class="item-lista"><div class="icono2">💗</div><div><b>Fondo de pantalla</b><br><small>Airi x Yuta • lugar seguro</small></div></div>
+<div class="item-lista"><div class="icono2">🔒</div><div><b>Contraseña</b><br><small>Cumple de Airi • 30-08-1897</small></div></div>
+<div class="item-lista"><div class="icono2">🖤</div><div><b>Chats archivados</b><br><small>1 chat archivado • Nadia</small></div></div>
+</div>
+</div>
+
+<!-- RELOJ -->
+<div id="reloj" class="pantalla app-page" onclick="event.stopPropagation()">
+<div class="app-header"><b>⏰ Reloj</b><button onclick="cerrar(event)">✕</button></div>
+<div class="lista">
+<div class="item-lista"><div class="icono2">💗</div><div><b>07:00 - Llamar a Airi 💗</b><br><small>Todos los días</small></div></div>
+<div class="item-lista"><div class="icono2" style="background:#111;color:white;">🖤</div><div><b>21:12 - Ver a Nadia 🖤</b><br><small>En donde siempre • Secreta</small></div></div>
+</div>
+</div>
+
+<!-- CALCULADORA -->
+<div id="calculadora" class="pantalla app-page" onclick="event.stopPropagation()" style="background:#111;color:white;">
+<div class="app-header" style="background:#111;border:none;"><b style="color:white;">🧮 Calculadora</b><button onclick="cerrar(event)" style="background:#333;color:white;">✕</button></div>
+<div style="padding:20px;text-align:right;font-size:36px;">30081897 💗</div>
+<p style="text-align:center;font-size:12px;color:#aaa;">Si pones 30081897 se abre el álbum secreto 🖤<br>Contraseña = Cumple de Airi</p>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:16px;"><div style="background:#333;padding:16px;text-align:center;border-radius:50%;">C</div><div style="background:#333;padding:16px;text-align:center;border-radius:50%;">+/-</div><div style="background:#333;padding:16px;text-align:center;border-radius:50%;">%</div><div style="background:#ff9f0a;padding:16px;text-align:center;border-radius:50%;">÷</div><div style="background:#333;padding:16px;text-align:center;border-radius:50%;">7</div><div style="background:#333;padding:16px;text-align:center;border-radius:50%;">8</div><div style="background:#333;padding:16px;text-align:center;border-radius:50%;">9</div><div style="background:#ff9f0a;padding:16px;text-align:center;border-radius:50%;">x</div><div style="background:#333;padding:16px;text-align:center;border-radius:50%;">4</div><div style="background:#333;padding:16px;text-align:center;border-radius:50%;">5</div><div style="background:#333;padding:16px;text-align:center;border-radius:50%;">6</div><div style="background:#ff9f0a;padding:16px;text-align:center;border-radius:50%;">-</div></div>
+</div>
+
+<div class="bar"></div>
+</div>
+
+<script>
+const MI_PASSWORD="30081897";
+function checkPass(e){e.stopPropagation();let v=document.getElementById('pass').value;if(v===MI_PASSWORD){document.getElementById('lock').style.display='none';document.getElementById('home').style.display='block';}else{document.getElementById('error').style.display='block';document.getElementById('pass').value="";}}
+document.getElementById('pass').addEventListener('keypress',function(e){if(e.key==='Enter')checkPass(e);});
+function abrir(e,id){e.stopPropagation();document.querySelectorAll('.pantalla').forEach(p=>p.style.display='none');document.getElementById('home').style.display='block';document.getElementById(id).style.display='block';}
+function cerrar(e){e.stopPropagation();document.querySelectorAll('.pantalla').forEach(p=>p.style.display='none');document.getElementById('home').style.display='block';}
+function showEp(e,n){e.stopPropagation();document.querySelectorAll('.ep-bar button').forEach(b=>b.classList.remove('on'));e.target.classList.add('on');document.querySelectorAll('.ep-content').forEach(c=>c.style.display='none');document.getElementById('ep'+n).style.display='block';}
+function playSong(el,titulo,artista){document.querySelectorAll('.song').forEach(s=>s.classList.remove('active'));el.classList.add('active');document.getElementById('now-title').textContent=titulo;document.getElementById('now-artist').textContent=artista;}
+function togglePlay(e){e.stopPropagation();let b=e.target;b.textContent=b.textContent==='⏸️'?'▶️':'⏸️';}
+</script>
+</body>
+</html>
